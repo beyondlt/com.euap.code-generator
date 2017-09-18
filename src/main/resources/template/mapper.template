@@ -1,0 +1,77 @@
+#set(hygd.bapp.tools.mybatis.GenConfig genConfig)
+package ${genConfig.mapperPackage};
+
+import ${genConfig.modelPackage}.${javaName};
+#if(pkMethodParameters)
+import org.apache.ibatis.annotations.Param;
+#end
+import org.apache.ibatis.session.RowBounds;
+
+import java.util.List;
+
+/**
+ * ${tableComments}
+ *
+ * @tableName ${tableName}
+ * @auther www.hygdsoft.com
+ * @date ${date}
+ */
+public interface ${javaName}Mapper {
+
+    /**
+     * 插入
+     */
+    int insert(${javaName} record);
+
+#if(genInsertSelective)
+    /**
+     * 选择插入
+     */
+    int insertSelective(${javaName} record);
+
+#end
+#if(pkMethodParameters)
+    /**
+     * 根据主键删除
+     */
+    int deleteByPrimaryKey($!{pkMethodParameters});
+
+#end
+    /**
+     * 根据条件删除
+     */
+    int delete(${javaName} record);
+
+    /**
+     * 根据主键更新
+     */
+    int updateByPrimaryKey(${javaName} record);
+
+    /**
+     * 根据主键选择更新
+     */
+    int updateByPrimaryKeySelective(${javaName} record);
+
+#if(pkMethodParameters)
+    /**
+     * 根据主键查询
+     */
+    ${javaName} selectByPrimaryKey($!{pkMethodParameters});
+
+#end
+    /**
+     * 根据条件统计
+     */
+    int count(${javaName} record);
+
+    /**
+     * 条件查询
+     */
+    List<${javaName}> select(@Param("record") ${javaName} record, @Param("order") String order);
+
+    /**
+     * 分页查询
+     */
+    List<${javaName}> select(RowBounds rowBounds, @Param("record") ${javaName} record, @Param("order") String order);
+
+}

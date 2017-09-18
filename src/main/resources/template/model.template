@@ -1,0 +1,39 @@
+#set(hygd.bapp.tools.mybatis.GenConfig genConfig)
+package ${genConfig.modelPackage};
+
+import java.io.Serializable;
+
+/**
+ * ${tableComments}
+ *
+ * @tableName ${tableName}
+ * @auther www.hygdsoft.com
+ * @date ${date}
+ *
+ @ClassDesc(value="${tableComments}")
+public class ${javaName} implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    #for(Map column:columns)
+    /** ${column.remark}${column.pkMark} */
+    @PropertyDesc(value="${column.remark}")
+    #if(column.pkMark)
+    @PK
+    #end
+    private ${column.javaType} ${column.propertyName};
+
+    #end
+    #for(Map column:columns)
+    /** ${column.remark}${column.pkMark} */
+    public ${column.javaType} ${column.getMethodName}() {
+        return ${column.propertyName};
+    }
+
+    /** ${column.remark}${column.pkMark} */
+    public void ${column.setMethodName}(${column.javaType} ${column.propertyName}) {
+        this.${column.propertyName} = ${column.propertyName};
+    }
+
+    #end
+}

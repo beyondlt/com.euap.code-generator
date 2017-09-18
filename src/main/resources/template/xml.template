@@ -1,0 +1,167 @@
+#set(hygd.bapp.tools.mybatis.GenConfig genConfig)
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="${mapperName}">
+
+    <resultMap id="BaseResultMap" type="${modelName}">
+        #for(Map column:columns)
+        <result column="${column.columnName}" property="${column.propertyName}" jdbcType="${column.jdbcType}"/>
+        #end
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        ${baseColumnList}
+    </sql>
+
+    <insert id="insert" parameterType="${modelName}" >
+        insert into ${tableName} (
+        #for(column:columns)
+        #if(for.last)
+            ${column.columnName}
+        #else
+            ${column.columnName},
+        #end
+        #end
+        )
+        values (
+        #for(column:columns)
+        #if(for.last)
+            \#{${column.propertyName},jdbcType=${column.jdbcType}}
+        #else
+            \#{${column.propertyName},jdbcType=${column.jdbcType}},
+        #end
+        #end
+        )
+    </insert>
+
+#if(genInsertSelective)
+    <insert id="insertSelective" parameterType="${modelName}" >
+        insert into ${tableName}
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            #for(column:columns)
+            <if test="${column.propertyName} != null and ${column.propertyName} != ''">
+                ${column.columnName},
+            </if>
+            #end
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            #for(column:columns)
+            <if test="${column.propertyName} != null and ${column.propertyName} != ''">
+                \#{${column.propertyName},jdbcType=${column.jdbcType}},
+            </if>
+            #end
+        </trim>
+    </insert>
+
+#end
+    #if(pkMethodParameters)
+    <delete id="deleteByPrimaryKey" parameterType="map" >
+        delete from ${tableName} t1
+        where
+        #for(column:primaryKeys)
+        #if(for.first)
+            t1.${column.columnName} = \#{${column.propertyName},jdbcType=${column.jdbcType}}
+        #else
+            and t1.${column.columnName} = \#{${column.propertyName},jdbcType=${column.jdbcType}}
+        #end
+        #end
+    </delete>
+
+    #end
+    <delete id="delete"  parameterType="${modelName}">
+        delete from ${tableName} t1
+        <where>
+            #for(Map column:columns)
+            <if test="${column.propertyName} != null and ${column.propertyName} != ''">
+                and t1.${column.columnName} =\#{${column.propertyName},jdbcType=${column.jdbcType}}
+            </if>
+            #end
+        </where>
+    </delete>
+
+    <update id="updateByPrimaryKey" parameterType="${modelName}" >
+        update ${tableName} t1
+        set
+        #for(column:columns)
+        #if(for.last)
+            t1.${column.columnName} = \#{${column.propertyName},jdbcType=${column.jdbcType}}
+        #else
+            t1.${column.columnName} = \#{${column.propertyName},jdbcType=${column.jdbcType}},
+        #end
+        #end
+        where
+        #for(column:primaryKeys)
+        #if(for.first)
+            t1.${column.columnName} = \#{${column.propertyName},jdbcType=${column.jdbcType}}
+        #else
+            and t1.${column.columnName} = \#{${column.propertyName},jdbcType=${column.jdbcType}}
+        #end
+        #end
+    </update>
+
+    <update id="updateByPrimaryKeySelective" parameterType="${modelName}" >
+        update ${tableName} t1
+        <set >
+            #for(column:columns)
+            <if test="${column.propertyName} != null and ${column.propertyName} != ''">
+                t1.${column.columnName} = \#{${column.propertyName},jdbcType=${column.jdbcType}},
+            </if>
+            #end
+        </set>
+        where
+        #for(column:primaryKeys)
+        #if(for.first)
+            t1.${column.columnName} = \#{${column.propertyName},jdbcType=${column.jdbcType}}
+        #else
+            and t1.${column.columnName} = \#{${column.propertyName},jdbcType=${column.jdbcType}}
+        #end
+        #end
+    </update>
+
+    #if(pkMethodParameters)
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="map" >
+        select
+		    <include refid="Base_Column_List" />
+        from ${tableName} t1
+        where
+        #for(column:primaryKeys)
+        #if(for.first)
+            t1.${column.columnName} = \#{${column.propertyName},jdbcType=${column.jdbcType}}
+        #else
+            and t1.${column.columnName} = \#{${column.propertyName},jdbcType=${column.jdbcType}}
+        #end
+        #end
+    </select>
+
+    #end
+    <select id="count" resultType="Integer" parameterType="${modelName}">
+        select count(1) from ${tableName} t1
+        <where>
+            #for(column:columns)
+            <if test="${column.propertyName} != null and ${column.propertyName} != ''">
+                and t1.${column.columnName} = \#{${column.propertyName},jdbcType=${column.jdbcType}}
+            </if>
+            #end
+        </where>
+    </select>
+
+    <select id="select" resultMap="BaseResultMap" parameterType="${modelName}">
+        select
+        <include refid="Base_Column_List"/>
+        from ${tableName} t1
+        <where>
+            #for(column:columns)
+            <if test="record.${column.propertyName} != null and record.${column.propertyName} != ''">
+                and t1.${column.columnName} = \#{record.${column.propertyName},jdbcType=${column.jdbcType}}
+            </if>
+            #end
+        </where>
+        <if test="order != null and order != ''">
+            order by \${order}
+        </if>
+    </select>
+
+    <!-- ################################################## 自定义方法区域 start ################################################## -->
+
+    <!-- ################################################## 自定义方法区域 end   ################################################## -->
+</mapper>
