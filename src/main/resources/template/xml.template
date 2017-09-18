@@ -1,4 +1,4 @@
-#set(hygd.bapp.tools.mybatis.GenConfig genConfig)
+#set(com.euap.code.generator.GenConfig genConfig)
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="${mapperName}">
@@ -161,7 +161,5 @@
         </if>
     </select>
 
-    <!-- ################################################## 自定义方法区域 start ################################################## -->
 
-    <!-- ################################################## 自定义方法区域 end   ################################################## -->
 </mapper>

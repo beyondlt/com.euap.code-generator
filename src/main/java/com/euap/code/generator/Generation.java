@@ -124,13 +124,13 @@ public class Generation {
         List<Map> configList = getMetaConfig(genConfig.tableNames);
         Properties engineConfig = new Properties();
         engineConfig.put("loaders+", "httl.spi.loaders.JarLoader");
-        engineConfig.put("compiler", "httl.spi.compilers.JavassistCompiler");
+        //engineConfig.put("compiler", "httl.spi.compilers.JavassistCompiler");
         engineConfig.put("json.codec", "httl.spi.codecs.JacksonCodec");
         Engine engine = Engine.getEngine(engineConfig);
         try {
-            Template xmlTemplate = engine.getTemplate("mybatis/xml.template", "gbk");
-            Template mapperTemplate = engine.getTemplate("mybatis/mapper.template", "gbk");
-            Template modelTemplate = engine.getTemplate("mybatis/model.template", "gbk");
+            Template xmlTemplate = engine.getTemplate("template/xml.template", "UTF-8");
+            Template mapperTemplate = engine.getTemplate("template/mapper.template", "UTF-8");
+            Template modelTemplate = engine.getTemplate("template/model.template", "UTF-8");
             int length = configList.size();
             for (int i = 0; i < length; i++) {
                 Map map = configList.get(i);
@@ -183,6 +183,7 @@ public class Generation {
         ResultSet columnResult = null;
         Properties props = new Properties();
         props.put("remarksReporting", "true");
+        props.setProperty("useInformationSchema","true");
         props.put("user", genConfig.username);
         props.put("password", genConfig.password);
         String date = sdf.format(new Date());

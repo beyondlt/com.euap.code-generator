@@ -1,6 +1,9 @@
-#set(hygd.bapp.tools.mybatis.GenConfig genConfig)
+#set(com.euap.code.generator.GenConfig genConfig)
 package ${genConfig.modelPackage};
 
+import com.euap.common.annotation.ClassDesc;
+import com.euap.common.annotation.PropertyDesc;
+import com.euap.common.annotation.PK;
 import java.io.Serializable;
 
 /**
@@ -9,7 +12,7 @@ import java.io.Serializable;
  * @tableName ${tableName}
  * @auther www.hygdsoft.com
  * @date ${date}
- *
+ */
  @ClassDesc(value="${tableComments}")
 public class ${javaName} implements Serializable {
 
