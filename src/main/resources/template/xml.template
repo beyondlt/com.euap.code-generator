@@ -151,7 +151,7 @@
         from ${tableName} t1
         <where>
             #for(column:columns)
-            <if test="record.${column.propertyName} != null and record.${column.propertyName} != ''">
+            <if test="record!=null and record.${column.propertyName} != null and record.${column.propertyName} != ''">
                 and t1.${column.columnName} = \#{record.${column.propertyName},jdbcType=${column.jdbcType}}
             </if>
             #end
